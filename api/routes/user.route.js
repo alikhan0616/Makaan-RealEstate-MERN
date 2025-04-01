@@ -1,9 +1,7 @@
 import express from 'express'
+import { test } from '../controller/user.controller.js';
+const router = express.Router()
 
-const router = express.Router();
-
-router.get("/test" , (req, res) => {
-    res.json({message: "The Api is working fine!"})
-})
+router.get("/test" , test)
 
 export default router;
