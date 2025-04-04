@@ -7,13 +7,13 @@ export default function SignUp() {
       <h1 className='font-semibold text-3xl text-center my-7'>Sign Up</h1>
       <form className='flex flex-col gap-4'>
         <input type="text" placeholder='username' 
-        className='border-none bg-amber-50 rounded-lg p-3'
+        className='border-none bg-amber-50 rounded-lg p-3' id="username"
         />
         <input type="email" placeholder='email' 
-        className='border-none bg-amber-50 rounded-lg p-3'
+        className='border-none bg-amber-50 rounded-lg p-3' id="email"
         />
         <input type="password" placeholder='password' 
-        className='border-none bg-amber-50 rounded-lg p-3'
+        className='border-none bg-amber-50 rounded-lg p-3' id="password"
         />
         <button className='bg-slate-700 uppercase p-3 text-white border rounded-lg hover:opacity-95 disabled:opacity-70 cursor-pointer'>
           Sign Up
