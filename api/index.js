@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from 'cors'
 import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js'
 import authRouter from './routes/auth.route.js'
@@ -18,6 +19,7 @@ app.use(express.json())
 app.listen(3000, () => {
     console.log("server running on local port 3000")
 })
+app.use(cors())
 
 app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
