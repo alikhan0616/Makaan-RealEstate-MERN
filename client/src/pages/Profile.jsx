@@ -1,15 +1,20 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useRef, useState, useEffect } from 'react';
 import  { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase.js'
+import { updateUserStart, updateUserSuccess, updateUserFailure } from '../redux/user/userSlice.js';
 
 export default function Profile() {
-  const {currentUser} = useSelector(state => state.user);
+  const {currentUser, loading, error} = useSelector(state => state.user);
   const [file, setFile] = useState(undefined)
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({})
+  const [updateSuccess, setUpdateSuccess] = useState(false)
   const fileRef = useRef(null)
+  const dispatch = useDispatch();
+
+  
   useEffect(() => {
     if(file){
       handleFileUpload(file)
@@ -38,10 +43,38 @@ export default function Profile() {
       }
     )
   }
+  const handleOnChange = (e) => {
+    setFormData({...formData, [e.target.id]: e.target.value})
+  }
+  const handleOnSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+      const data = await res.json()
+      if(data.success == false){
+        dispatch(updateUserFailure(data.message))
+        return
+      }
+
+      dispatch(updateUserSuccess(data))
+      setUpdateSuccess(true)
+    } catch (error) {
+      setUpdateSuccess(false)
+      dispatch(updateUserFailure(error.message))
+    }
+
+  }
   return (
     <div className='max-w-lg mx-auto p-3'>
       <h1 className='font-semibold text-3xl text-center my-7'>Profile</h1>
-      <form className='flex flex-col gap-4'>
+      <form onSubmit={handleOnSubmit} className='flex flex-col gap-4'>
         <input onChange={(e) => setFile(e.target.files[0])} type='file' ref={fileRef} hidden accept='image/*' />
         <img onClick={() => fileRef.current.click()} className='cursor-pointer rounded-full h-27 w-27 self-center object-cover' src={formData.avatar || currentUser.avatar} alt="profile icon" />
         <p className='text-sm self-center'>
@@ -53,14 +86,14 @@ export default function Profile() {
             <span className='text-green-700'>File Uploaded Successfully!</span>
           ) : ''}
         </p>
-        <input className='border-none bg-amber-50 rounded-lg p-3'
-         type='text' placeholder='username' id='username'/>
-        <input className='border-none bg-amber-50 rounded-lg p-3'
-         type='email' placeholder='email' id='email'/>
-        <input className='border-none bg-amber-50 rounded-lg p-3'
-         type='text' placeholder='password' id='password'/>
-         <button className='bg-slate-700 uppercase p-3 text-white border rounded-lg hover:opacity-95 disabled:opacity-70 cursor-pointer'>
-          Update
+        <input onChange={handleOnChange} className='border-none bg-amber-50 rounded-lg p-3'
+         type='text' placeholder='username' id='username' defaultValue={currentUser.username} />
+        <input onChange={handleOnChange}  className='border-none bg-amber-50 rounded-lg p-3'
+         type='email' placeholder='email' id='email' defaultValue={currentUser.email} />
+        <input onChange={handleOnChange} className='border-none bg-amber-50 rounded-lg p-3'
+         type='password' placeholder='password' id='password'/>
+         <button disabled={loading} className='bg-slate-700 uppercase p-3 text-white border rounded-lg hover:opacity-95 disabled:opacity-70 cursor-pointer'>
+          {loading ? "Loading..." : "Update"}
          </button>
          <button className='bg-green-700 uppercase p-3 text-white border rounded-lg hover:opacity-95 disabled:opacity-70 cursor-pointer'>
           Create Listing
@@ -70,6 +103,8 @@ export default function Profile() {
         <span className='text-red-600 cursor-pointer'>Delete Account</span>
         <span className='text-red-600 cursor-pointer'>Sign Out</span>
       </div>
+      <p className='text-red-700 my-4'>{error ? error : ""}</p>
+      <p className='text-green-700 my-4'>{updateSuccess ? "Profile updated successfully!" : ""}</p>
     </div>
   )
 }
