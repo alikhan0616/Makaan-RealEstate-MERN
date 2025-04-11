@@ -2,7 +2,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useRef, useState, useEffect } from 'react';
 import  { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase.js'
-import { updateUserStart, updateUserSuccess, updateUserFailure } from '../redux/user/userSlice.js';
+import { updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure} from '../redux/user/userSlice.js';
 
 export default function Profile() {
   const {currentUser, loading, error} = useSelector(state => state.user);
@@ -58,7 +63,7 @@ export default function Profile() {
         body: JSON.stringify(formData),
       })
       const data = await res.json()
-      if(data.success == false){
+      if(data.success === false){
         dispatch(updateUserFailure(data.message))
         return
       }
@@ -70,6 +75,22 @@ export default function Profile() {
       dispatch(updateUserFailure(error.message))
     }
 
+  }
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart())
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      })
+      const data = await res.json()
+      if(data.success === false){
+        dispatch(deleteUserFailure(data.message))
+        return
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message))
+    }
   }
   return (
     <div className='max-w-lg mx-auto p-3'>
@@ -100,7 +121,7 @@ export default function Profile() {
          </button>
       </form>
       <div className='flex justify-between my-2'>
-        <span className='text-red-600 cursor-pointer'>Delete Account</span>
+        <span onClick={handleDeleteAccount} className='text-red-600 cursor-pointer'>Delete Account</span>
         <span className='text-red-600 cursor-pointer'>Sign Out</span>
       </div>
       <p className='text-red-700 my-4'>{error ? error : ""}</p>
