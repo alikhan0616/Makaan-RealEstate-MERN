@@ -24,8 +24,6 @@ export default function Profile() {
   const [showUserListings, setShowUserListings] = useState([])
   const fileRef = useRef(null)
   const dispatch = useDispatch();
-
-  console.log(showUserListings)
   useEffect(() => {
     if(file){
       handleFileUpload(file)
