@@ -4,7 +4,9 @@ import {Swiper, SwiperSlide} from 'swiper/react'
 import SwiperCore from 'swiper'
 import { Navigation } from 'swiper/modules'
 import 'swiper/css/bundle'
+import {useSelector} from 'react-redux'
 import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking, FaShare } from "react-icons/fa";
+import Contact from '../components/Contact';
 
 
 export default function Listing() {
@@ -14,6 +16,8 @@ export default function Listing() {
     const [error, setError] = useState(false)
     const [copied, setCopied] = useState(false)
     const params = useParams()
+    const [contact, setContact] = useState(false)
+    const {currentUser} = useSelector(state => state.user)
     useEffect(() => {
         try {
             setLoading(true)
@@ -114,6 +118,10 @@ export default function Listing() {
                         {listing.furnished ? "Furnished" : "Unfurnished"}
                     </li>
                 </ul>
+                {currentUser && currentUser._id != listing.userRef && !contact &&
+                <button onClick={()=> setContact(true)} className='my-5 bg-slate-700 text-white p-3 rounded-lg hover:opacity-85 cursor-pointer w-80 sm:w-full self-center'>Contact Landlord</button>
+                }
+                {contact && <Contact listing={listing} />}
             </div>
             </>
         )
