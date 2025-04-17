@@ -180,7 +180,7 @@ export default function Search() {
                     name="type"
                     id="offer"
                     onChange={handleChange}
-                    checked={sidebarData.value}
+                    checked={sidebarData.offer}
                     />
                     <span>Offer</span>
                 </div>   
