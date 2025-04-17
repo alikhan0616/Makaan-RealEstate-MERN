@@ -17,7 +17,6 @@ export default function Search() {
     const [listings, setListings] = useState([])
     const [showMore, setShowMore] = useState(false)
 
-    console.log(listings)
     const navigate = useNavigate()
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
