@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 export default function ListingItem({listing}) {
   return (
-    <div className='shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full sm:w-[330px] bg-white rounded-lg'>
+    <div className='shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full md:w-[330px] bg-white rounded-lg'>
       <Link to={`/listing/${listing._id}`}>
       <img src={listing.imageUrls[0]} alt="listing image"
       className='h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300'
