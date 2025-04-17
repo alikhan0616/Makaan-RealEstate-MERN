@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ListingItem from '../components/ListingItem'
 
 export default function Search() {
     const [sidebarData, setSidebarData] = useState({
@@ -188,7 +189,7 @@ export default function Search() {
                     <span>Furnished</span>
                 </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-1 items-center gap-3">
                 <label className='font-semibold'>Sort:</label>
                 <select
                 onChange={handleChange}
@@ -205,10 +206,16 @@ export default function Search() {
             <button className='bg-slate-700 text-white uppercase cursor-pointer hover:opacity-95 p-3 rounded-lg'>Search</button>
         </form>
       </div>
-      <div className="">
-        <h1 className='text-3xl font-semibold text-center p-3 mt-5 text-slate-700'>Listing Results:</h1>
-        {loading && <h1 className='font-semibold text-center p-3'>Loading...</h1>}
+      <div className="flex-1">
+        <h1 className='text-3xl font-semibold border-gray-200 border-b-2 p-3 mt-5 text-slate-700'>Listing Results:</h1>
+        <div className="flex flex-wrap gap-4 p-7">
+        {loading && <h1 className='font-semibold text-xl text-slate-700 text-center p-3 w-full'>Loading...</h1>}
         {error && <h1 className='text-red-700 text-center font-semibold p-3'>Error Occurred Fetching Listings...</h1>}
+        {!loading && listings.length === 0 && (
+            <p className='text-slate-700 font-semibold text-center text-xl'>No Listing Found!</p>
+        )}
+        {!loading && listings && listings.map((listing) => <ListingItem key={listing._id} listing={listing} />)}
+        </div>
       </div>
     </div>
   )
