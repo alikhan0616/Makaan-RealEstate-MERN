@@ -24,7 +24,10 @@ app.use(cookieParser());
 app.listen(3000, () => {
     console.log("server running on local port 3000")
 })
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000', // e.g., http://localhost:3000
+    credentials: true,
+}))
 
 app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
