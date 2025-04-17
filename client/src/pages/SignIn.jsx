@@ -52,7 +52,7 @@ export default function SignIn() {
         className='border-none bg-amber-50 rounded-lg p-3' id="password" onChange={handleChange}
         />
         <button disabled={loading} className='bg-slate-700 uppercase p-3 text-white border rounded-lg hover:opacity-95 disabled:opacity-70 cursor-pointer'>
-          {loading ? "loading..." : "Sing In"}
+          {loading ? "loading..." : "Sign In"}
         </button>
         <OAuth />
       </form>

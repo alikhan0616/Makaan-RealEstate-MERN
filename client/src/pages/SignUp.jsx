@@ -56,7 +56,7 @@ export default function SignUp() {
         className='border-none bg-amber-50 rounded-lg p-3' id="password" onChange={handleChange}
         />
         <button disabled={loading} className='bg-slate-700 uppercase p-3 text-white border rounded-lg hover:opacity-95 disabled:opacity-70 cursor-pointer'>
-          {loading ? "loading..." : "Sing Up"}
+          {loading ? "loading..." : "Sign Up"}
         </button>
         <OAuth />
       </form>
