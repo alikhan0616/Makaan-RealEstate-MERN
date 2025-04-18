@@ -92,7 +92,7 @@ export default function Home() {
           rentListings && rentListings.length > 0 && (
             <div className="">
               <div className="my-3">
-                <h2 className='text-2xl text-slate-600 font-semibold'>Recent place for rent</h2>
+                <h2 className='text-2xl text-slate-600 font-semibold'>Recent places for rent</h2>
                 <Link className='text-sm text-blue-800 hover:underline' to='/search?type=rent'>
                 Show more offers
                 </Link>
